@@ -27,7 +27,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run(){
     try{
 
-        const serviceCollection = client.db('g-car').collection('services');
+        const serviceCollection = client.db('interior-services').collection('services');
         // const orderCollection =client.db('g-car').collection('orders');
 
 
