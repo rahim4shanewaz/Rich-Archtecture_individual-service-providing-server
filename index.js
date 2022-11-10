@@ -20,12 +20,12 @@ app.use(express.json());
 // console.log(process.env.DB_USER)
 // console.log(process.env.DB_PASS)
 
-
+//database api
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.upngnl9.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 
-
+//JWT function
 function verifyJWT(req, res, next){
     const authHeader = req.headers.authorization;
 
@@ -72,7 +72,7 @@ async function run(){
 
 
       
-
+// get homepage services data
 
         app.get('/services', async (req, res) =>{
            
@@ -82,7 +82,7 @@ async function run(){
             res.send(services);
         });
 
-
+// get all services data
         app.get('/allservices', async (req, res) =>{
            
             const query ={};
@@ -91,14 +91,10 @@ async function run(){
             res.send(services);
         });
 
-        // app.post('/addservice', async (req, res) => {
-        //     const service = req.body;
-        //     const result = await serviceCollection.insertOne(service);
-        //     res.send(result);
-        // });
+     
 
      
-        
+        // get single service by id 
 
         app.get("/service/:id", async (req, res) => {
             const id = req.params.id;
@@ -109,6 +105,8 @@ async function run(){
           });
 
 
+
+          //get review
           app.get('/productreviews/id', async (req, res) => {
 
 
@@ -121,7 +119,7 @@ async function run(){
             res.send(reviews);
         });
 
-
+//get user service
         app.get('/userServices', verifyJWT, async (req, res) => {
 
             const decoded = req.decoded;
@@ -142,7 +140,7 @@ async function run(){
             res.send(Services);
         });
 
-
+// use review
         app.get('/userreviews', verifyJWT, async (req, res) => {
 
             const decoded = req.decoded;
@@ -192,37 +190,7 @@ async function run(){
         
         
         
-        
-        
-        
-        
-        
-        // app.get('/productreviews/id', async (req, res) => {
-
-        //     const id = req.params.id;
-
-
-        //     let query = {};
-        //     if (req.query.id) {
-        //         query = {
-        //             id: req.query.id
-        //         }
-        //     }
-        //     const cursor = ReviewCollection.find(query);
-        //     const reviews = await cursor.toArray();
-        //     res.send(reviews);
-        // });
-
-
-      
-
-
-
-
-
-
-
-
+    //send service
 
 
         app.post('/addservice', verifyJWT, async (req, res) => {
@@ -233,7 +201,7 @@ async function run(){
 
 
 
-
+//send review
 
         app.post('/addreview', async (req, res) => {
             const service = req.body;
