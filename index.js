@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 
 
@@ -28,15 +28,82 @@ async function run(){
     try{
 
         const serviceCollection = client.db('interior-services').collection('services');
+        const ReviewCollection = client.db('userReviews').collection('userReviews');
         // const orderCollection =client.db('g-car').collection('orders');
 
 
+
         app.get('/services', async (req, res) =>{
+           
+            const query ={};
+            const cursor =  serviceCollection.find(query).limit(3);
+            const services = await cursor.toArray();
+            res.send(services);
+        });
+
+        app.get('/allservices', async (req, res) =>{
+           
             const query ={};
             const cursor =  serviceCollection.find(query);
             const services = await cursor.toArray();
             res.send(services);
         });
+
+        app.post('/addservice', async (req, res) => {
+            const service = req.body;
+            const result = await serviceCollection.insertOne(service);
+            res.send(result);
+        });
+
+        app.post('/addreview', async (req, res) => {
+            const service = req.body;
+            const result = await ReviewCollection.insertOne(service);
+            res.send(result);
+        });
+        
+
+        app.get("/service/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const service = await serviceCollection.findOne(query);
+            res.send(service);
+        
+          });
+
+
+
+
+
+
+
+
+
+        app.get('/userServices', async (req, res) => {
+            
+
+            let query = {};
+            if (req.query.email) {
+                query = {
+                    email: req.query.email
+                }
+            }
+            const cursor = serviceCollection.find(query);
+            const orders = await cursor.toArray();
+            res.send(orders);
+        });
+
+       
+
+        
+
+
+
+
+
+
+
+
+
 
 
 
